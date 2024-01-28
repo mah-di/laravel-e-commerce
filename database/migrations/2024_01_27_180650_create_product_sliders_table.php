@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('short_des');
-            $table->unsignedDouble('price');
+            $table->string('pricing');
             $table->string('image');
 
             $table->foreignId('product_id')
