@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\ProductSliderController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,3 +30,7 @@ Route::get('/products/{id}', [ProductController::class, 'single'])->name('produc
 Route::get('/product-sliders', [ProductSliderController::class, 'get'])->name('productSlider.get');
 Route::get('/product-details/{id}', [ProductDetailController::class, 'get'])->name('productDetail.get');
 Route::get('/reviews/{id}', [ReviewController::class, 'get'])->name('review.get');
+
+Route::post('/login', [UserController::class, 'login'])->name('login')->middleware('guest.jwt');
+Route::post('/login-verify', [UserController::class, 'loginVerify'])->name('login.verify')->middleware('guest.jwt');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
