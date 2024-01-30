@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 class ProductDetailController extends Controller
 {
 
-    public function get(string $id)
+    public function get(string $productID)
     {
         try {
-            $data = ProductDetail::where('product_id', $id)->first();
+            $data = ProductDetail::where('product_id', $productID)->first();
 
             return ResponseHelper::make('success', $data);
 

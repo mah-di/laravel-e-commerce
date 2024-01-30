@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('review');
+            $table->string('review')->nullable();
             $table->enum('rating', [1, 2, 3, 4, 5]);
 
             $table->foreignId('customer_profile_id')
@@ -21,7 +21,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-            
+
             $table->foreignId('product_id')
                 ->constrained()
                 ->cascadeOnUpdate()
