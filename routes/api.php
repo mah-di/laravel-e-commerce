@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\ProductSliderController;
@@ -33,4 +34,7 @@ Route::get('/reviews/{id}', [ReviewController::class, 'get'])->name('review.get'
 
 Route::post('/login', [UserController::class, 'login'])->name('login')->middleware('guest.jwt');
 Route::post('/login-verify', [UserController::class, 'loginVerify'])->name('login.verify')->middleware('guest.jwt');
+
+Route::post('/profile', [CustomerProfileController::class, 'save'])->name('profile.save')->middleware('auth.jwt');
+Route::get('/profile', [CustomerProfileController::class, 'getProfile'])->name('profile.get')->middleware('auth.jwt');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
