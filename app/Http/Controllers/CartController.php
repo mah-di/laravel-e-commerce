@@ -25,13 +25,10 @@ class CartController extends Controller
                 'qty' => ['required', 'numeric', 'gt:0'],
             ]);
 
-            $product = Product::where('id', $request->product_id)->select(['stock', 'price', 'discount_price'])->first();
+            $product = Product::where('id', $request->product_id)->first();
 
             if (!$product)
                 throw new Exception("Invalid Product.");
-
-            if ($request->qty > $product->stock)
-                throw new Exception("Quantity exceeds available stock.");
 
             $price = ($product->discount_price > 0) ? $product->discount_price : $product->price;
 
@@ -43,6 +40,9 @@ class CartController extends Controller
                 ->first();
 
             if (!$cart) {
+                if ($request->qty > $product->stock)
+                    throw new Exception("Quantity exceeds available stock.");
+
                 Cart::create([
                     'user_id' => $request->user()->id,
                     ...$validData,
@@ -53,6 +53,9 @@ class CartController extends Controller
 
             } else {
                 $qtyDiff = $request->qty - $cart->qty;
+
+                if ($qtyDiff > $product->stock)
+                    throw new Exception("Quantity exceeds available stock.");
 
                 Cart::where([
                         'user_id' => $request->user()->id,

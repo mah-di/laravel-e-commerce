@@ -13,13 +13,17 @@ class Invoice extends Model
         'total',
         'vat',
         'payable',
-        'cus_details',
-        'ship_details',
+        'cus_detail',
+        'ship_detail',
         'transaction_id',
         'validation_id',
         'delivery_status',
         'payment_status',
         'user_id',
+    ];
+
+    protected $attributes = [
+        'validation_id' => 0
     ];
 
     public function user()

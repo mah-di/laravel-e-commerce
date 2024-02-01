@@ -4,6 +4,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\ProductSliderController;
@@ -53,5 +54,9 @@ Route::post('/user/cart', [CartController::class, 'save'])->name('cart.save')->m
 Route::get('/user/cart', [CartController::class, 'get'])->name('cart.get')->middleware('auth.jwt');
 Route::delete('/user/cart/{id}', [CartController::class, 'delete'])->name('cart.delete')->middleware('auth.jwt');
 Route::delete('/user/cart', [CartController::class, 'clear'])->name('cart.clear')->middleware('auth.jwt');
+
+Route::get('/invoice/place', [InvoiceController::class, 'create'])->name('invoice.create')->middleware('auth.jwt');
+Route::get('/invoice', [InvoiceController::class, 'getAll'])->name('invoice.getAll')->middleware('auth.jwt');
+Route::get('/invoice/{id}', [InvoiceController::class, 'get'])->name('invoice.get')->middleware('auth.jwt');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
