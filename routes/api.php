@@ -60,3 +60,8 @@ Route::get('/invoice', [InvoiceController::class, 'getAll'])->name('invoice.getA
 Route::get('/invoice/{id}', [InvoiceController::class, 'get'])->name('invoice.get')->middleware('auth.jwt');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
+
+Route::post('/payment-success/{transactionID}', [InvoiceController::class, 'paymentSuccess'])->name('paymentSuccess');
+Route::post('/payment-fail/{transactionID}', [InvoiceController::class, 'paymentFail'])->name('paymentFail');
+Route::post('/payment-cancel/{transactionID}', [InvoiceController::class, 'paymentCancel'])->name('paymentCancel');
+Route::post('/ipn', [InvoiceController::class, 'handleIPN'])->name('ipn');

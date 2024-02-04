@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\SSLCommerz;
 use App\Models\Cart;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
@@ -63,12 +64,81 @@ class InvoiceController extends Controller
                 Cart::where('id', $cart->id)->delete();
             }
 
+            $result = SSLCommerz::initiate($invoice, $profile, $request->user()->email);
+
             DB::commit();
 
-            return ResponseHelper::make('success', null);
+            return ResponseHelper::make('success', [
+                'payment_methods' => $result,
+                'total' => $data['total'],
+                'vat' => $data['vat'],
+                'payable' => $data['payable']
+            ]);
+
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
         }
+    }
+
+    public function paymentSuccess(Request $request, string $transactionID)
+    {
+        try {
+            if (!$request->hasValidSignature())
+                throw new Exception("Unauthorized");
+
+            SSLCommerz::success($transactionID);
+
+            return ResponseHelper::make('success', null, 'Payment Success.');
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function paymentFail(Request $request, string $transactionID)
+    {
+        try {
+            if (!$request->hasValidSignature())
+                throw new Exception("Unauthorized");
+
+            SSLCommerz::fail($transactionID);
+
+            return ResponseHelper::make('success', null, 'Payment Failed.');
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+
+    }
+
+    public function paymentCancel(Request $request, string $transactionID)
+    {
+        try {
+            if (!$request->hasValidSignature())
+                throw new Exception("Unauthorized");
+
+            SSLCommerz::cancel($transactionID);
+
+            return ResponseHelper::make('success', null, 'Payment Cancelled.');
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+
+    }
+
+    public function handleIPN(Request $request)
+    {
+        if (!$request->hasValidSignature())
+            throw new Exception("Unauthorized");
+
+        $transactionID = $request->tran_id;
+        $status = $request->status;
+        $validationID = $request->val_id;
+
+        SSLCommerz::ipn($transactionID, $status, $validationID);
+
+        return 1;
     }
 
     public function getAll(Request $request)
