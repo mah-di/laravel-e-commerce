@@ -57,7 +57,7 @@ class UserController extends Controller
 
             $token = JWTHelper::createToekn($user->id, $user->email);
 
-            return ResponseHelper::make('success', compact('user', 'token'), 'Login Successful.')->cookie('token', $token);
+            return ResponseHelper::make('success', compact('user', 'token'), 'Login Successful.')->cookie('token', $token, 60*24*30);
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());

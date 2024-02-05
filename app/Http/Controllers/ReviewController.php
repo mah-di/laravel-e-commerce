@@ -77,7 +77,7 @@ class ReviewController extends Controller
     {
         try {
             $data = Review::where('product_id', $productID)->with([
-                    'customer' => fn ($q) => $q->select(['cus_name'])
+                    'customer' => fn ($q) => $q->select(['id', 'cus_name'])
                 ])
                 ->get();
 

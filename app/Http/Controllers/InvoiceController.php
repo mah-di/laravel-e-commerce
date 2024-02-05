@@ -10,6 +10,7 @@ use App\Models\InvoiceProduct;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class InvoiceController extends Controller
 {
@@ -88,7 +89,7 @@ class InvoiceController extends Controller
 
             SSLCommerz::success($transactionID);
 
-            return ResponseHelper::make('success', null, 'Payment Success.');
+            return Redirect::route('profile.page');
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
@@ -103,7 +104,7 @@ class InvoiceController extends Controller
 
             SSLCommerz::fail($transactionID);
 
-            return ResponseHelper::make('success', null, 'Payment Failed.');
+            return Redirect::route('profile.page');
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
@@ -119,7 +120,7 @@ class InvoiceController extends Controller
 
             SSLCommerz::cancel($transactionID);
 
-            return ResponseHelper::make('success', null, 'Payment Cancelled.');
+            return Redirect::route('profile.page');
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
@@ -147,23 +148,6 @@ class InvoiceController extends Controller
             $invoices = Invoice::where('user_id', $request->user()->id)->get();
 
             return ResponseHelper::make('success', $invoices);
-
-        } catch (Exception $exception) {
-            return ResponseHelper::make('fail', null, $exception->getMessage());
-        }
-    }
-
-    public function get(Request $request, string $id)
-    {
-        try {
-            $invoice = Invoice::where([
-                    'id' => $id,
-                    'user_id' => $request->user()->id,
-                ])
-                ->with('invoiceProducts')
-                ->first();
-
-            return ResponseHelper::make('success', $invoice);
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());

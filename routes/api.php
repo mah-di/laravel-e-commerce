@@ -5,6 +5,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerProfileController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceProductController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\ProductSliderController;
@@ -25,15 +27,24 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
+Route::get('/brands/{id}', [BrandController::class, 'single'])->name('brand.single');
+
 Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/categories/{id}', [CategoryController::class, 'single'])->name('category.single');
+
 Route::get('/product-sliders', [ProductSliderController::class, 'get'])->name('productSlider.get');
+
 Route::get('/brands/{id}/products', [ProductController::class, 'indexByBrand'])->name('product.brand.index');
 Route::get('/categories/{id}/products', [ProductController::class, 'indexByCategory'])->name('product.category.index');
 Route::get('/remark/{remark}/products', [ProductController::class, 'indexByRemark'])->name('product.remark.index');
+
 Route::get('/products', [ProductController::class, 'search'])->name('product.search');
 Route::get('/products/{id}', [ProductController::class, 'single'])->name('product.single');
+
 Route::get('/products/{productID}/details', [ProductDetailController::class, 'get'])->name('productDetail.get');
 Route::get('/products/{productID}/reviews', [ReviewController::class, 'getProductReviews'])->name('product.review.get');
+
+Route::get('/policy/{type}', [PolicyController::class, 'get'])->name('policy.get');
 
 Route::post('/login', [UserController::class, 'login'])->name('login')->middleware('guest.jwt');
 Route::post('/login-verify', [UserController::class, 'loginVerify'])->name('login.verify')->middleware('guest.jwt');
@@ -57,9 +68,9 @@ Route::delete('/user/cart', [CartController::class, 'clear'])->name('cart.clear'
 
 Route::get('/invoice/place', [InvoiceController::class, 'create'])->name('invoice.create')->middleware('auth.jwt');
 Route::get('/invoice', [InvoiceController::class, 'getAll'])->name('invoice.getAll')->middleware('auth.jwt');
-Route::get('/invoice/{id}', [InvoiceController::class, 'get'])->name('invoice.get')->middleware('auth.jwt');
+Route::get('/invoice/{id}', [InvoiceProductController::class, 'get'])->name('invoice.get')->middleware('auth.jwt');
 
-Route::post('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth.jwt');
 
 Route::post('/payment-success/{transactionID}', [InvoiceController::class, 'paymentSuccess'])->name('paymentSuccess');
 Route::post('/payment-fail/{transactionID}', [InvoiceController::class, 'paymentFail'])->name('paymentFail');

@@ -21,4 +21,18 @@ class BrandController extends Controller
         }
     }
 
+    public function single(string $id)
+    {
+        try {
+            $data = Brand::find($id);
+
+            if (!$data)
+                throw new Exception("Unknown Brand");
+
+            return ResponseHelper::make('success', $data);
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
 }

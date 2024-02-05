@@ -21,4 +21,18 @@ class CategoryController extends Controller
         }
     }
 
+    public function single(string $id)
+    {
+        try {
+            $data = Category::find($id);
+
+            if (!$data)
+                throw new Exception("Unknown Category");
+
+            return ResponseHelper::make('success', $data);
+        } catch (Exception $exception) {
+            return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
 }
