@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
 
         'auth.jwt' => \App\Http\Middleware\TokenAuthenticate::class,
         'guest.jwt' => \App\Http\Middleware\RedirectAuthenticatedUser::class,
+        'web.redirect.anon' => \App\Http\Middleware\WebRedirectAnonymousUser::class,
+        'web.redirect.auth' => \App\Http\Middleware\WebRedirectAuthenticatedUser::class,
     ];
 }

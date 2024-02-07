@@ -41,7 +41,7 @@
                     <ul class="navbar-nav">
                         <li><a class="nav-link nav_item" href="{{url("/")}}">Home</a></li>
                         <li class="dropdown">
-                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Products</a>
+                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Categories</a>
                             <div class="dropdown-menu">
                                 <ul id="CategoryItem">
 
