@@ -24,8 +24,8 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
-            $table->string('color');
-            $table->string('size');
+            $table->string('color')->nullable();
+            $table->string('size')->nullable();
             $table->unsignedSmallInteger('qty');
             $table->unsignedDouble('price');
 

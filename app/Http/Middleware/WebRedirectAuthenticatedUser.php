@@ -20,7 +20,7 @@ class WebRedirectAuthenticatedUser
 
         $data = json_decode($response->getContent());
 
-        if ($data->status === 'fail' and $data->message === 'Can\'t access while logged in.')
+        if ($data and $data->status === 'fail' and $data->message === 'Can\'t access while logged in.')
             return Redirect::route('profile.page');
 
         return $response;

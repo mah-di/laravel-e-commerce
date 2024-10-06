@@ -60,7 +60,7 @@
 
 
         let res=await axios.get("/api/policy/"+type);
-        let des=res.data['des']
+        let des=res.data.data.des
         $("#policy").html(des)
     }
 

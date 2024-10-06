@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['Privacy Policy', 'User Agreement', 'Payment Policy', 'Return Policy', 'Legal Document']);
+            $table->enum('type', ['About', 'Contact', 'How To Buy', 'Payment System', 'Privacy Policy', 'User Agreement', 'Terms & Conditions']);
             $table->longText('des');
 
             $table->timestamp('created_at')->useCurrent();

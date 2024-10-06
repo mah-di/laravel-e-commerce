@@ -30,7 +30,7 @@ class ProductWishController extends Controller
                 ]
             );
 
-            return ResponseHelper::make('success', null, 'Product added to your Wishlist.');
+            return ResponseHelper::make('success', ['id' => $id], 'Product added to your Wishlist.');
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
@@ -40,9 +40,11 @@ class ProductWishController extends Controller
     public function get(Request $request)
     {
         try {
-            $data = ProductWish::where('user_id', $request->user()->id)
-                ->with(['product'])
-                ->get();
+            $query = ProductWish::where('user_id', $request->user()->id);
+
+            $data = ($request->short === 'true')
+                ? $query->pluck('product_id')
+                : $query->with(['product'])->get();
 
             return ResponseHelper::make('success', $data);
 

@@ -87,7 +87,7 @@
 
 
     async function getProduct() {
-        let res = await axios.get("/api/products/"+id)
+        let res = await axios.get("/api/product/"+id)
 
         return res.data['data']
     }
@@ -106,7 +106,7 @@
                                                     </div>`;
         document.getElementById('p_des').innerText=product['short_des'];
 
-        let res = await axios.get("/api/products/"+id+"/details");
+        let res = await axios.get("/api/product/"+id+"/detail");
         let Details=await res.data['data'];
 
         if (Details === null) {
@@ -159,7 +159,7 @@
 
 
     async function productReview(){
-        let res = await axios.get("/api/products/"+id+"/reviews");
+        let res = await axios.get("/api/product/"+id+"/review");
         let Details=await res.data['data'];
 
         $("#reviewList").empty();

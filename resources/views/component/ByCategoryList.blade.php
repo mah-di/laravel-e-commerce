@@ -29,7 +29,7 @@
         let searchParams=new URLSearchParams(window.location.search);
         let id=searchParams.get('id');
 
-        let res = await axios.get(`/api/categories/${id}`)
+        let res = await axios.get(`/api/category/${id}`)
 
         $("#CatName").text( res.data['data']['name']);
     }
@@ -39,9 +39,9 @@
         let id=searchParams.get('id');
 
 
-        let res=await axios.get(`/api/categories/${id}/products`);
+        let res=await axios.get(`/api/product?category_id=${id}&limit=12`);
         $("#byCategoryList").empty();
-        res.data['data'].forEach((item,i)=>{
+        res.data.data['data'].forEach((item,i)=>{
             let EachItem=`<div class="col-lg-3 col-md-4 col-6">
                                 <div class="product">
                                     <div class="product_img">

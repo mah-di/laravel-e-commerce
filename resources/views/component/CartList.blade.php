@@ -131,7 +131,7 @@
 
     async function updateCartItem(product_id, qty, color, size){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded')
-        let res = await axios.post("{{ route('cart.save') }}",{
+        let res = await axios.post("/api/user/cart?add_stock=true",{
             "product_id":product_id,
             "color":color,
             "size":size,

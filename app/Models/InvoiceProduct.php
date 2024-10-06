@@ -11,6 +11,7 @@ class InvoiceProduct extends Model
 
     protected $fillable = [
         'invoice_id',
+        'cart_id',
         'user_id',
         'product_id',
         'qty',

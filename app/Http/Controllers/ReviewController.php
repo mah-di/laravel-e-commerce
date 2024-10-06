@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\InvoiceProduct;
 use App\Models\Product;
 use App\Models\Review;
 use Exception;
@@ -49,10 +50,10 @@ class ReviewController extends Controller
         }
     }
 
-    public function getReviewByCustomer(Request $request, string $id)
+    public function getReviewByCustomer(Request $request, string $productId)
     {
         try {
-            $data = Review::where(['id' => $id, 'customer_profile_id' => $request->user()->profile->id])->with(['product'])->first();
+            $data = Review::where(['product_id' => $productId, 'customer_profile_id' => $request->user()->profile->id])->with(['product'])->first();
 
             return ResponseHelper::make('success', $data);
 
@@ -70,6 +71,28 @@ class ReviewController extends Controller
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());
+        }
+    }
+
+    public function getToReviewProducts(Request $request)
+    {
+        try {$reviewedProductIds = Review::where('customer_profile_id', $request->user()->profile->id)->distinct()->pluck('product_id');
+
+            $data = InvoiceProduct::whereIn('id',
+                    fn($q) => $q
+                        ->where('user_id', $request->user()->id)
+                        ->select(DB::raw('MAX(id)'))
+                        ->from('invoice_products')
+                        ->groupBy('product_id')
+                    )
+                ->whereNotIn('product_id', $reviewedProductIds)
+                ->with(['product'])
+                ->get();
+
+            return ResponseHelper::make('success', $data);
+
+        } catch (Exception $exception) {
+            return ResponseHelper::make('success', null, $exception->getMessage());
         }
     }
 

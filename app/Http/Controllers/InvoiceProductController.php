@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\Invoice;
 use App\Models\InvoiceProduct;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class InvoiceProductController extends Controller
                     'user_id' => $request->user()->id,
                 ])
                 ->with([
-                    'product' => fn ($q) => $q->select(['id', 'title'])
+                    'product' => fn ($q) => $q->select(['id', 'title', 'image'])
                 ])
                 ->get();
 

@@ -14,7 +14,7 @@ class PolicyController extends Controller
         try {
             $data = Policy::where('type', $type)->first();
 
-            return ResponseHelper::make('fail', $data);
+            return ResponseHelper::make('success', $data);
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, 'Cann\'t retrieve at this moment.');
         }

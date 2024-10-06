@@ -53,19 +53,19 @@ class InvoiceController extends Controller
 
             $invoice = Invoice::create($data);
 
-            foreach ($carts as $cart) {
+            foreach ($carts as $cart)
                 InvoiceProduct::create([
                     'invoice_id' => $invoice->id,
+                    'cart_id' => $cart->id,
                     'user_id' => $request->user()->id,
                     'product_id' => $cart->product_id,
                     'qty' => $cart->qty,
-                    'sale_price' => $cart->price,
+                    'sale_price' => $cart->price
                 ]);
 
-                Cart::where('id', $cart->id)->delete();
-            }
+            $frontEnd = $request->app ?? 'web';
 
-            $result = SSLCommerz::initiate($invoice, $profile, $request->user()->email);
+            $result = SSLCommerz::initiate($invoice, $profile, $request->user()->email, $frontEnd);
 
             DB::commit();
 
@@ -81,7 +81,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function paymentSuccess(Request $request, string $transactionID)
+    public function paymentSuccess(Request $request, string $transactionID, string $frontEnd)
     {
         try {
             if (!$request->hasValidSignature())
@@ -89,6 +89,9 @@ class InvoiceController extends Controller
 
             SSLCommerz::success($transactionID);
 
+            if ($frontEnd === 'vue')
+                return Redirect::to(env('VUE_PAYMENT_SUCCESS'));
+
             return Redirect::route('profile.page');
 
         } catch (Exception $exception) {
@@ -96,7 +99,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function paymentFail(Request $request, string $transactionID)
+    public function paymentFail(Request $request, string $transactionID, string $frontEnd)
     {
         try {
             if (!$request->hasValidSignature())
@@ -104,6 +107,9 @@ class InvoiceController extends Controller
 
             SSLCommerz::fail($transactionID);
 
+            if ($frontEnd === 'vue')
+                return Redirect::to(env('VUE_PAYMENT_UNSUCCESS'));
+
             return Redirect::route('profile.page');
 
         } catch (Exception $exception) {
@@ -112,13 +118,16 @@ class InvoiceController extends Controller
 
     }
 
-    public function paymentCancel(Request $request, string $transactionID)
+    public function paymentCancel(Request $request, string $transactionID, string $frontEnd)
     {
         try {
             if (!$request->hasValidSignature())
                 throw new Exception("Unauthorized");
 
             SSLCommerz::cancel($transactionID);
+
+            if ($frontEnd === 'vue')
+                return Redirect::to(env('VUE_PAYMENT_UNSUCCESS'));
 
             return Redirect::route('profile.page');
 
@@ -140,6 +149,21 @@ class InvoiceController extends Controller
         SSLCommerz::ipn($transactionID, $status, $validationID);
 
         return 1;
+    }
+
+    public function get(Request $request, string $id)
+    {
+        try {
+            $data = Invoice::where([ 'id' => $id, 'user_id' => $request->user()->id ])->first();
+
+            if (!$data)
+                throw new Exception("Invoice not found.");
+
+            return ResponseHelper::make('success', $data);
+
+        } catch (Exception $error) {
+            return ResponseHelper::make('fail', null, $error->getMessage());
+        }
     }
 
     public function getAll(Request $request)

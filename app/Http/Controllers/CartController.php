@@ -20,8 +20,8 @@ class CartController extends Controller
         try {
             $validData = $request->validate([
                 'product_id' => ['required'],
-                'color' => ['required'],
-                'size' => ['required'],
+                'color' => ['nullable'],
+                'size' => ['nullable'],
                 'qty' => ['required', 'numeric', 'gt:0'],
             ]);
 
@@ -34,7 +34,9 @@ class CartController extends Controller
 
             $cart = Cart::where([
                     'user_id' => $request->user()->id,
-                    'product_id' => $request->product_id
+                    'product_id' => $request->product_id,
+                    'color' => $request->color,
+                    'size' => $request->size
                 ])
                 ->select(['qty'])
                 ->first();
@@ -50,8 +52,9 @@ class CartController extends Controller
                 ]);
 
                 $product->stock -= $request->qty;
+                $message = "Product added to your cart.";
 
-            } else {
+            } elseif ($request->add_stock === 'true') {
                 $qtyDiff = $request->qty - $cart->qty;
 
                 if ($qtyDiff > $product->stock)
@@ -59,7 +62,9 @@ class CartController extends Controller
 
                 Cart::where([
                         'user_id' => $request->user()->id,
-                        'product_id' => $request->product_id
+                        'product_id' => $request->product_id,
+                        'color' => $request->color,
+                        'size' => $request->size
                     ])
                     ->update([
                         'user_id' => $request->user()->id,
@@ -68,13 +73,35 @@ class CartController extends Controller
                     ]);
 
                 $product->stock -= $qtyDiff;
+                $message = "Quantity updated successfully.";
+            } else {
+                if ($request->qty > $product->stock)
+                    throw new Exception("Quantity exceeds available stock.");
+
+                $newQty = $request->qty + $cart->qty;
+
+                Cart::where([
+                        'user_id' => $request->user()->id,
+                        'product_id' => $request->product_id,
+                        'color' => $request->color,
+                        'size' => $request->size
+                    ])
+                    ->update([
+                        'user_id' => $request->user()->id,
+                        ...$validData,
+                        'qty' => $newQty,
+                        'price' => $price
+                    ]);
+
+                $product->stock -= $request->qty;
+                $message = "Product added to your cart.";
             }
 
             $product->save();
 
             DB::commit();
 
-            return ResponseHelper::make('success', null, 'Product added to your Cart.');
+            return ResponseHelper::make('success', ['remaining_stock' => $product->stock], $message);
 
         } catch (Exception $exception) {
             return ResponseHelper::make('fail', null, $exception->getMessage());

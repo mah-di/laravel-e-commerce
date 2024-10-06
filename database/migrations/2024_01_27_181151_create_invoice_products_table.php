@@ -25,6 +25,12 @@ return new class extends Migration
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
 
+            $table->foreignId('cart_id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
+
             $table->foreignId('product_id')
                 ->nullable()
                 ->constrained()
@@ -33,7 +39,7 @@ return new class extends Migration
 
             $table->unsignedSmallInteger('qty');
             $table->unsignedDouble('sale_price');
-            
+
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

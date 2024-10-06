@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Cart;
 use App\Models\CustomerProfile;
 use App\Models\Invoice;
 use App\Models\SSLCommerzAccount;
@@ -11,13 +12,13 @@ use Illuminate\Support\Facades\URL;
 class SSLCommerz
 {
 
-    public static function initiate(Invoice $invoice, CustomerProfile $profile, string $email)
+    public static function initiate(Invoice $invoice, CustomerProfile $profile, string $email, string $frontEnd)
     {
         $sslAccount = SSLCommerzAccount::first();
 
-        $successURL = URL::signedRoute('paymentSuccess', ['transactionID' => $invoice->transaction_id]);
-        $failURL = URL::signedRoute('paymentFail', ['transactionID' => $invoice->transaction_id]);
-        $cancelURL = URL::signedRoute('paymentCancel', ['transactionID' => $invoice->transaction_id]);
+        $successURL = URL::signedRoute('paymentSuccess', ['transactionID' => $invoice->transaction_id, 'frontEnd' => $frontEnd]);
+        $failURL = URL::signedRoute('paymentFail', ['transactionID' => $invoice->transaction_id, 'frontEnd' => $frontEnd]);
+        $cancelURL = URL::signedRoute('paymentCancel', ['transactionID' => $invoice->transaction_id, 'frontEnd' => $frontEnd]);
         $ipnURL = URL::signedRoute('ipn');
 
         $response = Http::asForm()->post($sslAccount->init_url, [
@@ -55,7 +56,17 @@ class SSLCommerz
 
     public static function success(string $transactionID)
     {
-        Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->update(['payment_status' => 'success']);
+        $invoice = Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->first();
+        $invoice->payment_status = 'success';
+        $invoice->save();
+
+        $cartIds = [];
+
+        foreach ($invoice->invoiceProducts as $invoiceProduct) {
+            $cartIds[] = $invoiceProduct->cart_id;
+        }
+
+        Cart::whereIn('id', $cartIds)->delete();
     }
 
     public static function fail(string $transactionID)

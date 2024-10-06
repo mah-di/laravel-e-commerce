@@ -14,9 +14,18 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $user = \App\Models\User::factory()->create(['email' => 'jon@doe.com']);
+        \App\Models\CustomerProfile::factory()->create(['user_id' => $user->id]);
+
+        $user = \App\Models\User::factory()->create(['email' => 'jane@doe.com']);
+        \App\Models\CustomerProfile::factory()->create(['user_id' => $user->id]);
+
+        $user = \App\Models\User::factory()->create(['email' => 'jerry@doe.com']);
+        \App\Models\CustomerProfile::factory()->create(['user_id' => $user->id]);
+
+        $this->call([
+            CategorySeeder::class,
+            BrandSeeder::class,
+        ]);
     }
 }

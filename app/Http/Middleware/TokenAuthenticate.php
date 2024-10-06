@@ -21,7 +21,7 @@ class TokenAuthenticate
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            $token = $request->cookie('token') ?? $request->header('token');
+            $token = $request->header('token') ?? $request->cookie('token');
 
             $payload = JWTHelper::verifyToekn($token);
 
