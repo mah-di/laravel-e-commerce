@@ -18,7 +18,9 @@ class ReviewSeeder extends Seeder
             \App\Models\Review::factory()->create([
                 'customer_profile_id' => $invoiceProduct->user->profile->id,
                 'product_id' => $invoiceProduct->product_id
-            ]);
+            ])->created(function ($review) {
+                $review->product()->update(['star' => $review->product->reviews->avg('rating')]);
+            });
         }
     }
 }

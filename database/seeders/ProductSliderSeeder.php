@@ -18,7 +18,7 @@ class ProductSliderSeeder extends Seeder
                 'product_id' => $product->id,
                 'title' => $product->title,
                 'short_des' => $product->short_des,
-                'pricing' => $product->price,
+                'pricing' => "৳ {$product->price}/- Only.",
                 'image' => $product->image,
             ]);
         });
