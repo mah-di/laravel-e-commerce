@@ -43,8 +43,8 @@ class InvoiceController extends Controller
                 'transaction_id' => uniqid(),
                 'cus_detail' => "Name:{$profile->cus_name},Address:{$profile->cus_address},City:{$profile->cus_city},Phone:{$profile->cus_phone}",
                 'ship_detail' => "Name:{$profile->ship_name},Address:{$profile->ship_address},City:{$profile->ship_city},Phone:{$profile->ship_phone}",
-                'delivary_status' => 'Pending',
-                'payment_status' => 'Pending',
+                'delivary_status' => 'PENDING',
+                'payment_status' => 'PENDING',
                 'user_id' => $request->user()->id,
             ];
 
@@ -154,7 +154,9 @@ class InvoiceController extends Controller
     public function get(Request $request, string $id)
     {
         try {
-            $data = Invoice::where([ 'id' => $id, 'user_id' => $request->user()->id ])->first();
+            $data = Invoice::where([ 'id' => $id, 'user_id' => $request->user()->id ])
+                ->whereIn('payment_status', ['SUCCESS', 'VALID'])
+                ->first();
 
             if (!$data)
                 throw new Exception("Invoice not found.");
@@ -169,7 +171,9 @@ class InvoiceController extends Controller
     public function getAll(Request $request)
     {
         try {
-            $invoices = Invoice::where('user_id', $request->user()->id)->get();
+            $invoices = Invoice::where([ 'user_id' => $request->user()->id ])
+                ->whereIn('payment_status', ['SUCCESS', 'VALID'])
+                ->get();
 
             return ResponseHelper::make('success', $invoices);
 

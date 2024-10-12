@@ -26,7 +26,7 @@ class InvoiceFactory extends Factory
             'transaction_id' => $this->faker->uuid(),
             'validation_id' => $this->faker->uuid(),
             'delivery_status' => 'DELIVERED',
-            'payment_status' => 'success',
+            'payment_status' => 'SUCCESS',
         ];
     }
 }

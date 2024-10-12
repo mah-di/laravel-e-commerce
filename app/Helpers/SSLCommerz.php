@@ -56,8 +56,14 @@ class SSLCommerz
 
     public static function success(string $transactionID)
     {
-        $invoice = Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->first();
-        $invoice->payment_status = 'success';
+        $invoice = Invoice::where('transaction_id', $transactionID)
+            ->where(fn ($query) =>
+                $query->where('validation_id', 0)
+                    ->orWhere('payment_status', 'VALID')
+            )
+            ->first();
+
+        $invoice->payment_status === 'PENDING' && ($invoice->payment_status = 'SUCCESS');
         $invoice->save();
 
         $cartIds = [];
@@ -71,12 +77,12 @@ class SSLCommerz
 
     public static function fail(string $transactionID)
     {
-        Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->update(['payment_status' => 'fail']);
+        Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->update(['payment_status' => 'FAIL']);
     }
 
     public static function cancel(string $transactionID)
     {
-        Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->update(['payment_status' => 'cancel']);
+        Invoice::where(['transaction_id' => $transactionID, 'validation_id' => 0])->update(['payment_status' => 'CANCEL']);
     }
 
     public static function ipn(string $transactionID, string $status, string $validationID)
