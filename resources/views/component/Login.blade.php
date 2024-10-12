@@ -8,7 +8,7 @@
                             <h3>Login</h3>
                         </div>
                             <div class="form-group mb-3">
-                                <input id="email" type="text" required="" class="form-control" name="email" placeholder="Your Email">
+                                <input id="email" type="text" required="" value="jon@doe.com" class="form-control" name="email" placeholder="Your Email">
                             </div>
                             <div class="form-group mb-3">
                                 <button onclick="Login()" type="submit" class="btn btn-fill-out btn-block" name="login">Next</button>

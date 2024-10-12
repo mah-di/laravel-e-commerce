@@ -8,7 +8,7 @@
                             <h3>Verification</h3>
                         </div>
                             <div class="form-group mb-3">
-                                <input id="code" type="text" required="" class="form-control" name="email" placeholder="Verification Code">
+                                <input id="code" type="text" required="" value="000000" class="form-control" name="email" placeholder="Verification Code">
                             </div>
                             <div class="form-group mb-3">
                                 <button onclick="verify()" type="submit" class="btn btn-fill-out btn-block" name="login">Confirm</button>
