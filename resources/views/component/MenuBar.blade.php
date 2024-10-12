@@ -17,7 +17,7 @@
 
                             @if(Cookie::get('token') !== null)
                                 <li><a href="{{url("/profile")}}"> <i class="linearicons-user"></i> Account</a></li>
-                                <li><a class="btn btn-danger btn-sm" href="{{url("/api/logout")}}"> Logout</a></li>
+                                <li><a class="btn btn-danger btn-sm" href="{{url("/_api/logout")}}"> Logout</a></li>
                             @else
                                 <li><a class="btn btn-danger btn-sm" href="{{url("/login")}}">Login</a></li>
                             @endif

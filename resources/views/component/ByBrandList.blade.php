@@ -29,7 +29,7 @@
         let searchParams=new URLSearchParams(window.location.search);
         let id=searchParams.get('id');
 
-        let res = await axios.get(`/api/brand/${id}`)
+        let res = await axios.get(`/_api/brand/${id}`)
 
         $("#BrandName").text( res.data['data']['name']);
     }
@@ -39,7 +39,7 @@
         let searchParams=new URLSearchParams(window.location.search);
         let id=searchParams.get('id');
 
-        let res=await axios.get(`/api/product?brand_id=${id}&limit=12`);
+        let res=await axios.get(`/_api/product?brand_id=${id}&limit=12`);
         $("#byBrandList").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=`<div class="col-lg-3 col-md-4 col-6">

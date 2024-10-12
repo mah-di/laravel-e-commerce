@@ -59,7 +59,7 @@
 
 
 
-        let res=await axios.get("/api/policy/"+type);
+        let res=await axios.get("/_api/policy/"+type);
         let des=res.data.data.des
         $("#policy").html(des)
     }

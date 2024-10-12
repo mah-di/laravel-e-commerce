@@ -87,7 +87,7 @@
 
 
     async function getProduct() {
-        let res = await axios.get("/api/product/"+id)
+        let res = await axios.get("/_api/product/"+id)
 
         return res.data['data']
     }
@@ -106,7 +106,7 @@
                                                     </div>`;
         document.getElementById('p_des').innerText=product['short_des'];
 
-        let res = await axios.get("/api/product/"+id+"/detail");
+        let res = await axios.get("/_api/product/"+id+"/detail");
         let Details=await res.data['data'];
 
         if (Details === null) {
@@ -159,7 +159,7 @@
 
 
     async function productReview(){
-        let res = await axios.get("/api/product/"+id+"/review");
+        let res = await axios.get("/_api/product/"+id+"/review");
         let Details=await res.data['data'];
 
         $("#reviewList").empty();
@@ -227,7 +227,7 @@
     async function AddToWishList() {
         try{
             $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-            let res = await axios.get("/api/user/wish/"+id);
+            let res = await axios.get("/_api/user/wish/"+id);
             $(".preloader").delay(90).fadeOut(100).addClass('loaded');
             if(res.status===200){
                 alert("Request Successful")

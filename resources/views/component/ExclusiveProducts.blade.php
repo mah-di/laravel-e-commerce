@@ -104,7 +104,7 @@
     }
 
     async function Popular(){
-        let res=await axios.get("{{ url('/api/product?remark=popular&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=popular&limit=8') }}");
         $("#PopularItem").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=constructCards(item)
@@ -115,7 +115,7 @@
 
 
     async function New (){
-        let res=await axios.get("{{ url('/api/product?remark=new&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=new&limit=8') }}");
         $("#NewItem").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=constructCards(item)
@@ -125,7 +125,7 @@
 
 
     async function Hot(){
-        let res=await axios.get("{{ url('/api/product?remark=hot&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=hot&limit=8') }}");
         $("#HotItem").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=constructCards(item)
@@ -137,7 +137,7 @@
 
 
     async function Discount(){
-        let res=await axios.get("{{ url('/api/product?remark=discount&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=discount&limit=8') }}");
         $("#DiscountItem").empty();
 
         res.data.data['data'].forEach((item,i)=>{
@@ -150,7 +150,7 @@
 
 
     async function FlashSale(){
-        let res=await axios.get("{{ url('/api/product?remark=flash%20sale&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=flash%20sale&limit=8') }}");
         $("#FlashSaleItem").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=constructCards(item)
@@ -161,7 +161,7 @@
 
 
     async function Trending(){
-        let res=await axios.get("{{ url('/api/product?remark=trending&limit=8') }}");
+        let res=await axios.get("{{ url('/_api/product?remark=trending&limit=8') }}");
         $("#TrendingItem").empty();
         res.data.data['data'].forEach((item,i)=>{
             let EachItem=constructCards(item)

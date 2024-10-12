@@ -84,7 +84,7 @@
 
     async function RemoveWishList(id){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.delete("/api/user/wish/"+id);
+        let res=await axios.delete("/_api/user/wish/"+id);
         $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
         if(res.status===200) {
@@ -97,7 +97,7 @@
 
     async function clearWishlist(){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.delete("/api/user/wish");
+        let res=await axios.delete("/_api/user/wish");
         $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
         if(res.status===200) {

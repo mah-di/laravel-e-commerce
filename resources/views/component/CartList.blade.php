@@ -131,7 +131,7 @@
 
     async function updateCartItem(product_id, qty, color, size){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded')
-        let res = await axios.post("/api/user/cart?add_stock=true",{
+        let res = await axios.post("/_api/user/cart?add_stock=true",{
             "product_id":product_id,
             "color":color,
             "size":size,
@@ -146,7 +146,7 @@
 
     async function RemoveCartList(id){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.delete("/api/user/cart/"+id);
+        let res=await axios.delete("/_api/user/cart/"+id);
         $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
         if(res.status===200) {
@@ -159,7 +159,7 @@
 
     async function clearCart(){
         $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-        let res=await axios.delete("/api/user/cart");
+        let res=await axios.delete("/_api/user/cart");
         $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
         if(res.status===200) {

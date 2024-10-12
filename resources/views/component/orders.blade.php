@@ -116,7 +116,7 @@
    async function InvoiceProductList(id) {
 
        $(".preloader").delay(90).fadeIn(100).removeClass('loaded');
-       let res= await axios.get("/api/invoice-detail/"+id);
+       let res= await axios.get("/_api/invoice-detail/"+id);
        $("#InvoiceProductModal").modal('show');
        $(".preloader").delay(90).fadeOut(100).addClass('loaded');
 
