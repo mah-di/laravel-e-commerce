@@ -19,6 +19,3 @@ yarn-error.log
 /.vscode
 
 .vercel
-/api
-.vercelignore
-vercel.json
